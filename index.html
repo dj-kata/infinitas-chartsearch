@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>CSV Search</title>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="script.js"></script>
+</head>
+<body>
+  <h1>Chart Search</h1>
+
+  <input type="checkbox" name="notesradar" value="NOTES"> NOTES
+  <input type="checkbox" name="notesradar" value="CHORD"> CHORD
+  <input type="checkbox" name="notesradar" value="PEAK"> PEAK
+  <input type="checkbox" name="notesradar" value="SCRATCH"> SCRATCH
+  <input type="checkbox" name="notesradar" value="CHARGE"> CHARGE
+  <input type="checkbox" name="notesradar" value="SOF-LAN"> SOF-LAN
+  <input type="checkbox" name="notesradar" value="empty"> 不明
+
+  <br>
+  
+  <input type="checkbox" name="difficulty" value="BEGINNER"> BEGINNER
+  <input type="checkbox" name="difficulty" value="NORMAL"> NORMAL
+  <input type="checkbox" name="difficulty" value="HYPER" checked> HYPER
+  <input type="checkbox" name="difficulty" value="ANOTHER" checked> ANOTHER
+  <input type="checkbox" name="difficulty" value="LEGGENDARIA"> LEGGENDARIA
+
+  <br>
+  
+  <input type="checkbox" name="level" value="1"> 1
+  <input type="checkbox" name="level" value="2"> 2
+  <input type="checkbox" name="level" value="3"> 3
+  <input type="checkbox" name="level" value="4"> 4
+  <input type="checkbox" name="level" value="5"> 5
+  <input type="checkbox" name="level" value="6"> 6
+  <input type="checkbox" name="level" value="7"> 7
+  <input type="checkbox" name="level" value="8"> 8
+  <input type="checkbox" name="level" value="9"> 9
+  <input type="checkbox" name="level" value="10"> 10
+  <input type="checkbox" name="level" value="11"> 11
+  <input type="checkbox" name="level" value="12"> 12
+
+  <br><br>
+
+  <input id="keyword_songname" placeholder="曲名検索">
+  <button onclick="search()">曲名検索</button>
+
+  <div id="pager"></div>
+
+  <table border="1">
+    <tbody id="result"></tbody>
+  </table>
+
+  <table border="1" id="result"></table>
+</body>
+</html>
