@@ -2,20 +2,21 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>CSV Search</title>
+  <title>INFINITAS Chart Search</title>
+  <link rel="stylesheet" href="./style.css">
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="script.js"></script>
 </head>
 <body>
-  <h1>Chart Search</h1>
+  <h1>INFINITAS Chart Search</h1>
 
-  <input type="checkbox" name="notesradar" value="NOTES"> NOTES
-  <input type="checkbox" name="notesradar" value="CHORD"> CHORD
-  <input type="checkbox" name="notesradar" value="PEAK"> PEAK
-  <input type="checkbox" name="notesradar" value="SCRATCH"> SCRATCH
-  <input type="checkbox" name="notesradar" value="CHARGE"> CHARGE
-  <input type="checkbox" name="notesradar" value="SOF-LAN"> SOF-LAN
-  <input type="checkbox" name="notesradar" value="empty"> 不明
+  <input type="radio" name="playmode" value="SP" checked> SP
+  <input type="radio" name="playmode" value="DP"> DP
+
+  <br>
+  
+  <input type="checkbox" name="version" value="1st&substream"> 1st&substream
+  <input type="checkbox" name="version" value="INFINITAS"> INFINITAS
 
   <br>
   
@@ -39,6 +40,16 @@
   <input type="checkbox" name="level" value="10"> 10
   <input type="checkbox" name="level" value="11"> 11
   <input type="checkbox" name="level" value="12"> 12
+
+  <br>
+  
+  <input type="checkbox" name="notesradar" value="NOTES"> NOTES
+  <input type="checkbox" name="notesradar" value="CHORD"> CHORD
+  <input type="checkbox" name="notesradar" value="PEAK"> PEAK
+  <input type="checkbox" name="notesradar" value="SCRATCH"> SCRATCH
+  <input type="checkbox" name="notesradar" value="CHARGE"> CHARGE
+  <input type="checkbox" name="notesradar" value="SOF-LAN"> SOF-LAN
+  <input type="checkbox" name="notesradar" value="empty"> 不明
 
   <br><br>
 

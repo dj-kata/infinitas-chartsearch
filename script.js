@@ -1,19 +1,28 @@
-let data = [];
-let filtered = [];
-let currentPage = 1;
+const data = {};
 const pageSize = 100;
 
-Papa.parse("data.csv", {
-  download: true,
-  header: false,
-  skipEmptyLines: true,
-  complete: function(results) {
-    data = results.data;
-  }
+let filtered = [];
+let currentPage = 1;
+
+["SP", "DP"].forEach(playmode => {
+  Papa.parse(`data_${playmode}.csv`, {
+    download: true,
+    header: false,
+    skipEmptyLines: true,
+    complete: function(results) {
+      data[playmode] = results.data;
+    }
+  });
 });
 
+/**
+ * 検索する
+ */
 function search() {
-  const keyword_songname = document.getElementById("keyword_songname").value.toLowerCase();
+  const playmode = document.querySelector('input[name="playmode"]:checked').value;
+
+  const selected_version = Array.from(document.querySelectorAll('input[name="version"]:checked'))
+                        .map(cb => cb.value.toLowerCase());
 
   const selected_difficulty = Array.from(document.querySelectorAll('input[name="difficulty"]:checked'))
                         .map(cb => cb.value.toLowerCase());
@@ -24,24 +33,28 @@ function search() {
   const selected_notesradar = Array.from(document.querySelectorAll('input[name="notesradar"]:checked'))
                         .map(cb => cb.value.toLowerCase());
 
-  filtered = data.filter(row => {
+  const keyword_songname = document.getElementById("keyword_songname").value.toLowerCase();
+
+  filtered = data[playmode].filter(row => {
+    const col1 = String(row[0] || "").toLowerCase();
     const col2 = String(row[1] || "").toLowerCase();
     const col3 = String(row[2] || "").toLowerCase();
     const col4 = String(row[3] || "").toLowerCase();
     const col5 = String(row[4] || "").toLowerCase();
 
-    const match2 =
-      keyword_songname === "" || col2.includes(keyword_songname);
+    const match1 =
+      selected_version.length === 0 ||
+      selected_version.some(v => col1.includes(v));
 
-    const match3 =
+    const match2 =
       selected_difficulty.length === 0 ||
       selected_difficulty.some(v => col3.includes(v));
 
-    const match4 =
+    const match3 =
       selected_level.length === 0 ||
       selected_level.some(v => col4.includes(v));
 
-    const match5 =
+    const match4 =
       selected_notesradar.length === 0 ||
       selected_notesradar.some(v => {
         if(v === "empty")
@@ -50,15 +63,20 @@ function search() {
           return col5.includes(v);
       });
 
-    return match2 && match3 && match4 && match5;
+    const match5 =
+      keyword_songname === "" || col2.includes(keyword_songname);
+
+    return match1 && match2 && match3 && match4 && match5;
   });
 
+  currentPage = 1;
 
-  currentPage = 1;  // 検索したら1ページ目に戻す
   renderPage();
-  // renderTable(filtered);
 }
 
+/**
+ * 検索結果をレンダリングする
+ */
 function renderPage() {
   const table = document.getElementById("result");
   const pager = document.getElementById("pager");
@@ -67,7 +85,6 @@ function renderPage() {
   const end = start + pageSize;
   const pageRows = filtered.slice(start, end);
 
-  // テーブル描画（高速版）
   let html = "";
   html += "<tr><th>バージョン</th><th>曲名</th><th>難易度</th><th>レベル</th><th>レーダー</th></tr>"
   pageRows.forEach(row => {
@@ -75,7 +92,6 @@ function renderPage() {
   });
   table.innerHTML = html || "<tr><td>該当なし</td></tr>";
 
-  // ページング描画
   const totalPages = Math.ceil(filtered.length / pageSize);
 
   let pagerHtml = `${filtered.length} 件`;
@@ -92,11 +108,17 @@ function renderPage() {
   pager.innerHTML = pagerHtml;
 }
 
+/**
+ * 次のページに移動する
+ */
 function nextPage() {
   currentPage++;
   renderPage();
 }
 
+/**
+ * 前のページに移動する
+ */
 function prevPage() {
   currentPage--;
   renderPage();
