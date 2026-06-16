@@ -38,12 +38,6 @@ tbody tr:hover {
   background: var(--row-hover);
 }
 
-/* 曲名 */
-.songname {
-  font-weight: 600;
-  color: #eef4ff;
-}
-
 /* BPM・難易度・レベル列を中央揃え */
 th:nth-child(3),
 td:nth-child(3),
@@ -82,49 +76,192 @@ input[type="radio"] {
   accent-color: #6ea8ff;
 }
 
-/* 難易度カラー */
-.diff-BEGINNER {
-  color: #6ee7b7;
-  font-weight: 700;
-}
-.diff-NORMAL {
-  color: #60a5fa;
-  font-weight: 700;
-}
-.diff-HYPER {
-  color: #facc15;
-  font-weight: 700;
-}
-.diff-ANOTHER {
-  color: #f87171;
-  font-weight: 700;
-}
 .diff-LEGGENDARIA {
   color: #c084fc;
   font-weight: 700;
+} */
+
+/* =========================
+共通バッジ
+========================= */
+.version-badge,
+.songname-badge
+.diff-badge,
+.level-badge,
+.notesradar-badge {
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+  padding: 3px 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 
-/* レベル色 */
+.version-badge {
+  min-width: 110px;
+}
+
+.songname-badge {
+  font-weight: 600;
+  color: #eef4ff;
+}
+
+.diff-badge {
+  min-width: 92px;
+}
+
+.level-badge {
+  min-width: 40px;
+  padding-inline: 8px;
+}
+
+.notesradar-badge {
+  min-width: 82px;
+}
+
+/* =========================
+バージョン
+========================= */
+
+.ver-INFINITAS {
+  color: #60b5ea;
+}
+
+/* =========================
+難易度
+========================= */
+
+.diff-BEGINNER {
+  color: #6ee7b7;
+}
+
+.diff-NORMAL {
+  color: #60a5fa;
+}
+
+.diff-HYPER {
+  color: #facc15;
+}
+
+.diff-ANOTHER {
+  color: #f87171;
+}
+
+.diff-LEGGENDARIA {
+  color: #c084fc;
+}
+
+/* =========================
+レベル
+========================= */
+
 .level-1,
 .level-2,
 .level-3,
 .level-4 {
-  background: rgba(96, 165, 250, 0.18);
+  color: #7dd3fc;
 }
 
 .level-5,
 .level-6,
 .level-7,
 .level-8 {
-  background: rgba(250, 204, 21, 0.18);
+  color: #facc15;
 }
 
 .level-9,
 .level-10 {
-  background: rgba(248, 113, 113, 0.18);
+  color: #f87171;
 }
 
 .level-11,
 .level-12 {
-  background: rgba(192, 132, 252, 0.2);
+  color: #c084fc;
+}
+
+/* =========================
+ノーツレーダー
+========================= */
+
+.notesradar-NOTES {
+  color: #60a5fa;
+}
+
+.notesradar-CHORD {
+  color: #facc15;
+}
+
+.notesradar-PEAK {
+  color: #f87171;
+}
+
+.notesradar-SCRATCH {
+  color: #c084fc;
+}
+
+.notesradar-CHARGE {
+  color: #fb923c;
+}
+
+.notesradar-SOF-LAN {
+  color: #2dd4bf;
+}
+
+.radar-unknown {
+  color: #cbd5e1;
+}
+
+/* =========================
+ソートボタン
+========================= */
+
+.sort-buttons {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 2px 6px;
+  margin-left: 4px;
+
+  color: #b9c0c8;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+
+  transition:
+    color 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.1s ease;
+}
+
+.sort-buttons:hover {
+  color: #60a5fa;
+  background: rgba(96, 165, 250, 0.12);
+  border-color: rgba(96, 165, 250, 0.35);
+}
+
+.sortbuttons:active {
+  transform: scale(0.96);
+}
+
+/* 現在ソート中 */
+.sort-active {
+  color: #60a5fa;
+  background: rgba(96, 165, 250, 0.18);
+  border-color: rgba(96, 165, 250, 0.5);
+}
+
+/* 昇順・降順アイコン */
+.sort-icon {
+  font-size: 0.75rem;
+  line-height: 1;
 }

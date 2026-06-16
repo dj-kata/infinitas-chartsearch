@@ -87,8 +87,11 @@ let orderMapVersions = {};
 let orderMapDifficulties = {};
 let orderMapNotesradars = {};
 
+/**
+ * ロード完了時の初期処理
+ */
 async function complete_loaded() {
-  document.querySelectorAll('.sortbuttons button').forEach(btn => {
+  document.querySelectorAll('.sort-buttons button').forEach(btn => {
     btn.addEventListener('click', () => {
       sortColIndex = parseInt(btn.dataset.col, 10);
       sortOrder = btn.dataset.order;
@@ -131,7 +134,7 @@ async function complete_loaded() {
     insert_checkbox(
       document.querySelector("div#notesradar"),
       "notesradar",
-      key !== "" ? key : "empty",
+      key !== "" ? key : "unknown",
       key !== "" ? key : "不明",
     );
   });
@@ -227,7 +230,7 @@ function search() {
 
     const match5 =
       selected_notesradar.length === 0 ||
-      selected_notesradar.some(v => (v === "empty" && notesradar === "") || notesradar.includes(v));
+      selected_notesradar.some(v => (v === "unknown" && notesradar === "") || notesradar.includes(v));
 
     return match1 && match2 && match3 && match4 && match5;
   });
@@ -314,11 +317,11 @@ function renderPage() {
   pageRows.forEach(row => {
     html += `
       <tr>
-        <td class="ver-${row[0].replace(" ", "_")}">${row[0] || ""}</td>
-        <td class="songname">${row[1] || ""}</td>
-        <td class="diff-${row[2]}">${row[2] || ""}</td>
-        <td class="level-${row[3]}">${row[3] || ""}</td>
-        <td>${row[4] || ""}</td>
+        <td class="version-badge ver-${row[0].replace(" ", "_")}">${row[0] || ""}</td>
+        <td class="songname-badge">${row[1] || ""}</td>
+        <td class="diff-badge diff-${row[2]}">${row[2] || ""}</td>
+        <td class="level-badge level-${row[3]}">${row[3] || ""}</td>
+        <td class="notesradar-badge notesradar-${row[4]}">${row[4] || ""}</td>
       </tr>
     `;
   });
