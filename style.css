@@ -1,17 +1,22 @@
 :root {
   --bg: #2d2e30;
   --panel: #35373a;
+  --panel-dark: #2f3134;
   --line: #565a60;
   --text: #f2f4f8;
   --muted: #b9c0c8;
   --row-blue: rgba(90, 145, 190, 0.16);
+  --row-hover: rgba(120, 180, 230, 0.24);
+  --accent-blue: #8ab4f8;
 }
 
+/* 全体 */
 body {
   background: var(--bg);
   color: var(--text);
 }
 
+/* テーブル */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -19,7 +24,8 @@ table {
   color: var(--text);
 }
 
-th, td {
+th,
+td {
   border: 1px solid var(--line);
   padding: 8px 10px;
 }
@@ -29,29 +35,96 @@ tbody tr:nth-child(even) {
 }
 
 tbody tr:hover {
-  background: rgba(120, 180, 230, 0.24);
+  background: var(--row-hover);
 }
 
+/* 曲名 */
+.songname {
+  font-weight: 600;
+  color: #eef4ff;
+}
+
+/* BPM・難易度・レベル列を中央揃え */
+th:nth-child(3),
+td:nth-child(3),
+th:nth-child(4),
+td:nth-child(4),
+th:nth-child(5),
+td:nth-child(5) {
+  text-align: center;
+}
+
+/* チェックボックス周り */
 label {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  margin: 4px 12px 8px 0;
+  gap: 8px;
+  margin: 4px 14px 10px 0;
+  padding: 6px 12px;
   line-height: 1.6;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-dark);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
 }
 
-input[type="checkbox"] {
-  margin-right: 4px;
+label:hover {
+  background: #42464c;
+  border-color: #7a8594;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  margin: 0;
   transform: scale(1.15);
+  vertical-align: middle;
+  accent-color: #6ea8ff;
 }
 
-.diff-beginner { color: #6ee7b7; }
-.diff-normal { color: #60a5fa; }
-.diff-hyper { color: #facc15; }
-.diff-another { color: #f87171; }
-.diff-leggendaria { color: #c084fc; }
+/* 難易度カラー */
+.diff-BEGINNER {
+  color: #6ee7b7;
+  font-weight: 700;
+}
+.diff-NORMAL {
+  color: #60a5fa;
+  font-weight: 700;
+}
+.diff-HYPER {
+  color: #facc15;
+  font-weight: 700;
+}
+.diff-ANOTHER {
+  color: #f87171;
+  font-weight: 700;
+}
+.diff-LEGGENDARIA {
+  color: #c084fc;
+  font-weight: 700;
+}
 
-.level-1, .level-2, .level-3, .level-4 { background: rgba(96,165,250,.18); }
-.level-5, .level-6, .level-7, .level-8 { background: rgba(250,204,21,.18); }
-.level-9, .level-10 { background: rgba(248,113,113,.18); }
-.level-11, .level-12 { background: rgba(192,132,252,.20); }
+/* レベル色 */
+.level-1,
+.level-2,
+.level-3,
+.level-4 {
+  background: rgba(96, 165, 250, 0.18);
+}
+
+.level-5,
+.level-6,
+.level-7,
+.level-8 {
+  background: rgba(250, 204, 21, 0.18);
+}
+
+.level-9,
+.level-10 {
+  background: rgba(248, 113, 113, 0.18);
+}
+
+.level-11,
+.level-12 {
+  background: rgba(192, 132, 252, 0.2);
+}
