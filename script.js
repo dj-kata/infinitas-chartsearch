@@ -180,6 +180,7 @@ function load_datafile(playmode) {
       skipEmptyLines: true,
       dynamicTyping: {
         3: true,
+        4: true,
       },
       complete: function(results) {
         data[playmode] = results.data.slice(1);
@@ -214,25 +215,25 @@ function search() {
     const songname = String(row[1] || "").toLowerCase();
     const difficulty = String(row[2] || "");
     const level = String(row[3] || "");
-    const notesradar = String(row[4] || "");
+    const notesradar = String(row[5] || "");
 
-    const match1 =
+    const match_version =
       selected_version.length === 0 || selected_version.includes(version);
 
-    const match2 =
+    const match_songname =
       keyword_songname === "" || songname.includes(keyword_songname);
 
-    const match3 =
+    const match_difficulty =
       selected_difficulty.length === 0 || selected_difficulty.includes(difficulty);
 
-    const match4 =
+    const match_level =
       selected_level.length === 0 || selected_level.includes(level);
 
-    const match5 =
+    const match_notesradar =
       selected_notesradar.length === 0 ||
       selected_notesradar.some(v => (v === "unknown" && notesradar === "") || notesradar.includes(v));
 
-    return match1 && match2 && match3 && match4 && match5;
+    return match_version && match_songname && match_difficulty && match_level && match_notesradar;
   });
 
   if(sortColIndex === 1) {
@@ -272,9 +273,10 @@ function compareValues(a, b, order) {
       result = orderMapDifficulties[a] - orderMapDifficulties[b];
       break;
     case 3:
+    case 4:
       result = a - b;
       break;
-    case 4:
+    case 5:
       if(!a.includes("/") && !b.includes("/"))
         result = orderMapNotesradars[a] - orderMapNotesradars[b];
       else
@@ -321,12 +323,13 @@ function renderPage() {
         <td class="songname-badge">${row[1] || ""}</td>
         <td class="diff-badge diff-${row[2]}">${row[2] || ""}</td>
         <td class="level-badge level-${row[3]}">${row[3] || ""}</td>
-        <td class="notesradar-badge notesradar-${row[4]}">${row[4] || ""}</td>
+        <td class="notes-badge">${row[4]}</td>
+        <td class="notesradar-badge notesradar-${row[5]}">${row[5] || ""}</td>
       </tr>
     `;
   });
 
-  table.innerHTML = html || '<tr><td colspan="5">該当なし</td></tr>';
+  table.innerHTML = html || '<tr><td colspan="6">該当なし</td></tr>';
   
   const totalPages = Math.ceil(resultdata.length / pageSize);
 

@@ -88,6 +88,7 @@ input[type="radio"] {
 .songname-badge
 .diff-badge,
 .level-badge,
+.notes-badge,
 .notesradar-badge {
   align-items: center;
   justify-content: center;

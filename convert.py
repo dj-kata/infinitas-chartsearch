@@ -10,5 +10,5 @@ for filename in ("SP.csv", "DP.csv",):
         writer = csv.writer(fout)
 
         for row in reader:
-            new_row = [row[0], row[1], row[2], row[3], row[23]]
+            new_row = [row[0], row[1], row[2], row[3], row[23], row[24]]
             writer.writerow(new_row)
