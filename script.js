@@ -34,6 +34,7 @@ const versions = [
   "EPOLIS",
   "Pinky Crush",
   "Sparkle Shower",
+  "ZINRAI",
   "INFINITAS",
 ];
 
