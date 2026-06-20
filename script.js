@@ -90,6 +90,46 @@ let orderMapVersions = {};
 let orderMapDifficulties = {};
 let orderMapNotesradars = {};
 
+const filterGroups = [
+  {
+    parentSelector: "div#version",
+    name: "version",
+    items: versions,
+    value: key => key,
+    text: key => key,
+    onEach: (key, i) => {
+      orderMapVersions[key] = i;
+    },
+  },
+  {
+    parentSelector: "div#difficulty",
+    name: "difficulty",
+    items: difficulties,
+    value: key => key,
+    text: key => key,
+    onEach: (key, i) => {
+      orderMapDifficulties[key] = i;
+    },
+  },
+  {
+    parentSelector: "div#level",
+    name: "level",
+    items: levels,
+    value: key => key,
+    text: key => key,
+  },
+  {
+    parentSelector: "div#notesradar",
+    name: "notesradar",
+    items: notesradars,
+    value: key => key !== "" ? key : "unknown",
+    text: key => key !== "" ? key : "不明",
+    onEach: (key, i) => {
+      orderMapNotesradars[key] = i;
+    },
+  },
+];
+
 /**
  * ロード完了時の初期処理
  */
@@ -106,44 +146,7 @@ async function complete_loaded() {
     });
   });
 
-  versions.forEach((key, i) => {
-    orderMapVersions[key] = i;
-    insert_checkbox(
-      document.querySelector("div#version"),
-      "version",
-      key,
-      key,
-    );
-  });
-
-  difficulties.forEach((key, i) => {
-    orderMapDifficulties[key] = i;
-    insert_checkbox(
-      document.querySelector("div#difficulty"),
-      "difficulty",
-      key,
-      key,
-    );
-  });
-
-  levels.forEach((key, i) => {
-    insert_checkbox(
-      document.querySelector("div#level"),
-      "level",
-      key,
-      key,
-    );
-  });
-
-  notesradars.forEach((key, i) => {
-    orderMapNotesradars[key] = i;
-    insert_checkbox(
-      document.querySelector("div#notesradar"),
-      "notesradar",
-      key !== "" ? key : "unknown",
-      key !== "" ? key : "不明",
-    );
-  });
+  filterGroups.forEach(insert_filter_group);
 
   const lastModified = document.querySelector("span#last-modefied");
 
@@ -193,6 +196,56 @@ function insert_checkbox(parent, name, value, text) {
 
     label.append(text);
     parent.append(label);
+
+    return input;
+}
+
+/**
+ * フィルタグループを挿入
+ * @param {Object} group フィルタグループ定義
+ */
+function insert_filter_group(group) {
+  const parent = document.querySelector(group.parentSelector);
+  const allCheckbox = insert_checkbox(
+    parent,
+    `${group.name}-all`,
+    "all",
+    "(全て)",
+  );
+
+  allCheckbox.addEventListener("change", () => {
+    document.querySelectorAll(`input[name="${group.name}"]`).forEach(input => {
+      input.checked = allCheckbox.checked;
+    });
+  });
+
+  group.items.forEach((key, i) => {
+    if(group.onEach) group.onEach(key, i);
+
+    const checkbox = insert_checkbox(
+      parent,
+      group.name,
+      group.value(key),
+      group.text(key),
+    );
+
+    checkbox.addEventListener("change", () => {
+      sync_all_checkbox(group.name);
+    });
+  });
+
+  sync_all_checkbox(group.name);
+}
+
+/**
+ * 個別チェック状態から「全て」の状態を同期
+ * @param {String} name チェックボックスのname
+ */
+function sync_all_checkbox(name) {
+  const allCheckbox = document.querySelector(`input[name="${name}-all"]`);
+  const checkboxes = Array.from(document.querySelectorAll(`input[name="${name}"]`));
+
+  allCheckbox.checked = checkboxes.every(input => input.checked);
 }
 
 /**
