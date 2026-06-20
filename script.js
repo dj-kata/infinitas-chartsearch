@@ -1,4 +1,4 @@
-const wikiurl = 'https://raw.githubusercontent.com/wiki/kaktuswald/infinitas-chartsearch';
+const wikiurl = '.';
 
 const pageSize = 100;
 
@@ -145,8 +145,14 @@ async function complete_loaded() {
     );
   });
 
-  const response = await fetch(`${wikiurl}/timestamp.txt`, {cache: "no-store"});
-  if(response.ok) {
+  const lastModified = document.querySelector("span#last-modefied");
+
+  try {
+    const response = await fetch(`${wikiurl}/timestamp.txt`, {cache: "no-store"});
+    if(!response.ok) {
+      throw new Error(`timestamp.txt: HTTP ${response.status}`);
+    }
+
     const timestamp = await response.text();
 
     const year = timestamp.slice(0, 4);
@@ -154,7 +160,7 @@ async function complete_loaded() {
     const day = timestamp.slice(6, 8);
     const hour = timestamp.slice(8, 10);
     const minute = timestamp.slice(10, 12);
-    document.querySelector("span#last-modefied").textContent = `${year}年${month}月${day}日 ${hour}時${minute}分`;
+    lastModified.textContent = `${year}年${month}月${day}日 ${hour}時${minute}分`;
 
     await Promise.all([
       load_datafile("SP", timestamp),
@@ -162,6 +168,10 @@ async function complete_loaded() {
     ]);
 
     search();
+  }
+  catch(error) {
+    console.error(error);
+    lastModified.textContent = `データ取得失敗: ${error.message}`;
   }
 }
 
@@ -202,11 +212,32 @@ function insert_checkbox(parent, name, value, text) {
         4: true,
       },
       complete: function(results) {
-        data[playmode] = results.data.slice(1);
+        if(results.errors.length > 0) {
+          reject(new Error(`${playmode}.csv: ${results.errors[0].message}`));
+          return;
+        }
+
+        data[playmode] = results.data.slice(1).map(normalizeRow);
         resolve();
-      }
+      },
+      error: function(error) {
+        reject(new Error(`${playmode}.csv: ${error.message}`));
+      },
     });
   });
+}
+
+/**
+ * 表示に使う6列へ揃える
+ * @param {Array} row CSVの1行
+ * @returns {Array}
+ */
+function normalizeRow(row) {
+  if(row.length >= 8) {
+    return [row[0], row[1], row[3], row[4], row[5], row[6]];
+  }
+
+  return [row[0], row[1], row[2], row[3], row[4], row[5]];
 }
 
 /**
@@ -350,7 +381,7 @@ function renderPage() {
 
   table.innerHTML = html || '<tr><td colspan="6">該当なし</td></tr>';
   
-  const totalPages = Math.ceil(resultdata.length / pageSize);
+  const totalPages = Math.max(1, Math.ceil(resultdata.length / pageSize));
 
   let pagerHtml = `${resultdata.length} 件`;
 
@@ -364,7 +395,7 @@ function renderPage() {
   if (currentPage < totalPages)
     pagerHtml += `<button onclick="nextPage()">次へ</button>`;
   else
-    pagerHtml += `<button onclick="nextPage() disabled">次へ</button>`;
+    pagerHtml += `<button onclick="nextPage()" disabled>次へ</button>`;
 
   pager.innerHTML = pagerHtml;
 }
