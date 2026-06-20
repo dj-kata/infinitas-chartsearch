@@ -157,6 +157,8 @@ async function complete_loaded() {
     });
   });
 
+  setup_collapsible_conditions();
+
   insert_all_checkbox(document.querySelector("div#version"), "version");
   versions.forEach((key, i) => {
     orderMapVersions[key] = i;
@@ -328,6 +330,36 @@ function sync_all_checkbox(name) {
 
   const checkboxes = Array.from(document.querySelectorAll(`input[name="${name}"]`));
   allCheckbox.checked = checkboxes.length > 0 && checkboxes.every(cb => cb.checked);
+}
+
+/**
+ * フィルタ条件全体を折り畳み可能にする
+ */
+function setup_collapsible_conditions() {
+  const parent = document.querySelector("div#conditions");
+  const button = document.createElement("button");
+  const titleText = "フィルタ条件";
+
+  button.type = "button";
+  button.className = "filter-toggle";
+  button.textContent = `▼ ${titleText}`;
+  button.setAttribute("aria-expanded", "true");
+
+  parent.prepend(button);
+
+  const toggle = () => {
+    const collapsed = parent.classList.toggle("filter-collapsed");
+    button.setAttribute("aria-expanded", String(!collapsed));
+    button.textContent = `${collapsed ? "▶" : "▼"} ${titleText}`;
+
+    Array.from(parent.children).forEach(child => {
+      if(child !== button) {
+        child.hidden = collapsed;
+      }
+    });
+  };
+
+  button.addEventListener("click", toggle);
 }
 
 /**
