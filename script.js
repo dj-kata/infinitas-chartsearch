@@ -157,6 +157,7 @@ async function complete_loaded() {
     });
   });
 
+  insert_all_checkbox(document.querySelector("div#version"), "version");
   versions.forEach((key, i) => {
     orderMapVersions[key] = i;
     insert_checkbox(
@@ -167,6 +168,7 @@ async function complete_loaded() {
     );
   });
 
+  insert_all_checkbox(document.querySelector("div#difficulty"), "difficulty");
   difficulties.forEach((key, i) => {
     orderMapDifficulties[key] = i;
     insert_checkbox(
@@ -177,6 +179,7 @@ async function complete_loaded() {
     );
   });
 
+  insert_all_checkbox(document.querySelector("div#level"), "level");
   levels.forEach((key, i) => {
     insert_checkbox(
       document.querySelector("div#level"),
@@ -186,6 +189,7 @@ async function complete_loaded() {
     );
   });
 
+  insert_all_checkbox(document.querySelector("div#notesradar"), "notesradar");
   notesradars.forEach((key, i) => {
     orderMapNotesradars[key] = i;
     insert_checkbox(
@@ -196,6 +200,7 @@ async function complete_loaded() {
     );
   });
 
+  insert_all_checkbox(document.querySelector("div#category"), "category");
   categories.forEach((key, i) => {
     orderMapCategories[key] = i;
     insert_checkbox(
@@ -233,26 +238,31 @@ async function complete_loaded() {
     document.querySelectorAll('input[name="version"]').forEach(cb => {
       cb.checked = selected_version.includes(cb.value);
     });
+    sync_all_checkbox("version");
 
     const selected_difficulty = await JSON.parse(localStorage.getItem("selected_difficulty") || "[]");
     document.querySelectorAll('input[name="difficulty"]').forEach(cb => {
       cb.checked = selected_difficulty.includes(cb.value);
     });
+    sync_all_checkbox("difficulty");
 
     const selected_level = await JSON.parse(localStorage.getItem("selected_level") || "[]");
     document.querySelectorAll('input[name="level"]').forEach(cb => {
       cb.checked = selected_level.includes(cb.value);
     });
+    sync_all_checkbox("level");
 
     const selected_notesradar = await JSON.parse(localStorage.getItem("selected_notesradar") || "[]");
     document.querySelectorAll('input[name="notesradar"]').forEach(cb => {
       cb.checked = selected_notesradar.includes(cb.value);
     });
+    sync_all_checkbox("notesradar");
 
     const selected_category = await JSON.parse(localStorage.getItem("selected_category") || "[]");
     document.querySelectorAll('input[name="category"]').forEach(cb => {
       cb.checked = selected_category.includes(cb.value);
     });
+    sync_all_checkbox("category");
 
     search();
   }
@@ -276,6 +286,48 @@ function insert_checkbox(parent, name, value, text) {
 
     label.append(text);
     parent.append(label);
+
+    input.addEventListener("change", () => {
+      sync_all_checkbox(name);
+    });
+
+    return input;
+}
+
+/**
+ * 「(全て)」チェックボックスを親要素に挿入
+ * @param {*} parent 親要素
+ * @param {String} name 対象チェックボックスのname
+ */
+function insert_all_checkbox(parent, name) {
+  const label = document.createElement("label");
+
+  const input = document.createElement("input");
+  input.type = "checkbox";
+  input.name = `${name}-all`;
+  input.value = "all";
+  label.append(input);
+
+  label.append("(全て)");
+  parent.append(label);
+
+  input.addEventListener("change", () => {
+    document.querySelectorAll(`input[name="${name}"]`).forEach(cb => {
+      cb.checked = input.checked;
+    });
+  });
+}
+
+/**
+ * 個別チェック状態から「(全て)」の状態を同期
+ * @param {String} name 対象チェックボックスのname
+ */
+function sync_all_checkbox(name) {
+  const allCheckbox = document.querySelector(`input[name="${name}-all"]`);
+  if(!allCheckbox) return;
+
+  const checkboxes = Array.from(document.querySelectorAll(`input[name="${name}"]`));
+  allCheckbox.checked = checkboxes.length > 0 && checkboxes.every(cb => cb.checked);
 }
 
 /**
@@ -466,7 +518,7 @@ function renderPage() {
 
   table.innerHTML = html || '<tr><td colspan="8">該当なし</td></tr>';
   
-  const totalPages = Math.ceil(resultdata.length / pageSize);
+  const totalPages = Math.max(1, Math.ceil(resultdata.length / pageSize));
 
   let pagerHtml = `${resultdata.length} 件`;
 
@@ -480,7 +532,7 @@ function renderPage() {
   if (currentPage < totalPages)
     pagerHtml += `<button onclick="nextPage()">次へ</button>`;
   else
-    pagerHtml += `<button onclick="nextPage() disabled">次へ</button>`;
+    pagerHtml += `<button onclick="nextPage()" disabled>次へ</button>`;
 
   pager.innerHTML = pagerHtml;
 }
